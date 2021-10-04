@@ -37,8 +37,9 @@ eval e t = eval' t (e, [])
 
 eval' :: Term -> (NameEnv Value, [Value]) -> Value
 eval' (Bound ii) (_, lEnv) = lEnv !! ii
-eval' _          _         = undefined
-
+eval' (Free na) (gEnv, _) = fromMaybe (VNeutral (NFree na)) $ lookup na gEnv
+eval' (t :@: t') env = vapp (eval' t env) (eval' t' env)
+eval' (Lam t) (gEnv, lEnv) = VLam (\x -> eval' t (gEnv, x:lEnv))
 
 --------------------------------
 -- Sección 4 - Mostrando Valores
