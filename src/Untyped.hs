@@ -12,7 +12,17 @@ import           Common
 ----------------------------------------------
 
 conversion :: LamTerm -> Term
-conversion = undefined
+conversion (LVar x) = Free (Global x)
+conversion (App a b) = conversion a :@: conversion b
+conversion (Abs x t) = Lam (ligarEnTerm 0 x (conversion t))
+
+ligarEnTerm :: Int -> String -> Term -> Term
+ligarEnTerm prof var (a :@: b) = ligarEnTerm prof var a :@: ligarEnTerm prof var b
+ligarEnTerm prof var (Lam t') = Lam (ligarEnTerm (prof + 1) var t')
+ligarEnTerm prof var v@(Free (Global ident))
+  | ident == var = Bound prof
+  | otherwise = v
+ligarEnTerm _ _ t = t
 
 -------------------------------
 -- Sección 3
