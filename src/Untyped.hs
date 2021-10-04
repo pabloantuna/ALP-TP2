@@ -29,7 +29,8 @@ ligarEnTerm _ _ t = t
 -------------------------------
 
 vapp :: Value -> Value -> Value
-vapp = undefined
+vapp (VLam f) b = f b
+vapp (VNeutral neu) b = VNeutral (NApp neu b)
 
 eval :: NameEnv Value -> Term -> Value
 eval e t = eval' t (e, [])
