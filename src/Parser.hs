@@ -15,7 +15,7 @@ import           Untyped
 ----------------------------------------------
 
 num :: Integer -> LamTerm
-num = undefined
+num = Abs "s" . Abs "z" . (iterate (App (LVar "s")) (LVar "z") !!) . fromIntegral 
 
 -------------------------------------------------
 -- Parser de Lambda Cálculo (Gramatica Extendida) 
