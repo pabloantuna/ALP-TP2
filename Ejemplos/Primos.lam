@@ -8,7 +8,7 @@ def not = \f. f false true
 def divisible = Y (\d . \x y. (is0 (resta y x)) (d (resta x y) y) (is0 x))
 
 -- funcion que cuenta la cantidad de divisores de un natural
-def cantDivisores = Y (\ep . \n i. (is0 i) zero (((divisible n i) suc id) (ep n (pred i))))
+def cantDivisores = Y (\cd . \n i. (is0 i) zero (((divisible n i) suc id) (cd n (pred i))))
 
 -- funcion que determina si un natural es primo
 def esPrimo = \n. and (not (is0 (pred (cantDivisores n n)))) (is0 (pred (pred (cantDivisores n n))))
