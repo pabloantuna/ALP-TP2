@@ -46,10 +46,9 @@ eval' (Lam t) (gEnv, lEnv) = VLam (\x -> eval' t (gEnv, x:lEnv))
 --------------------------------
 
 quote :: Value -> Term
-quote = undefined
+quote = quote' 0
 
-
-
-
-
-
+quote' :: Int -> Value -> Term
+quote' i (VLam f) = Lam (quote' (i + 1) (f (VNeutral (NFree (Quote i)))))
+quote' i (VNeutral (NFree na)) = Free na
+quote' i (VNeutral (NApp a b)) = quote' i (VNeutral a) :@: quote' i b
