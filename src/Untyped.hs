@@ -49,15 +49,7 @@ quote :: Value -> Term
 quote = quote' 0
 
 quote' :: Int -> Value -> Term
-quote' i (VLam f) = quotePorBound (i + 1) $ Lam (quote' (i + 1) (f (VNeutral (NFree (Quote i)))))
-quote' i (VNeutral (NFree na)) = Free na
+quote' i (VLam f) = Lam (quote' (i + 1) (f (VNeutral (NFree (Quote i)))))
+quote' i (VNeutral (NFree g@(Global _))) = Free g
+quote' i (VNeutral (NFree (Quote n))) = Bound (i - n - 1)
 quote' i (VNeutral (NApp a b)) = quote' i (VNeutral a) :@: quote' i b
-
-quotePorBound :: Int -> Term -> Term
-quotePorBound i (te :@: te') = quotePorBound i te :@: quotePorBound i te'
-quotePorBound i (Lam te) = Lam (quotePorBound i te)
-quotePorBound i (Free (Quote n)) = Bound (i - n - 1)
-quotePorBound i t = t
-
--- >>> quote (eval [] (Lam (Bound 0 :@: Lam (Bound 1 :@: Bound 0))))
--- Lam (Bound 0 :@: Lam (Bound 1 :@: Bound 0))
