@@ -10,5 +10,8 @@ def divisible = Y (\d . \x y. (is0 (resta y x)) (d (resta x y) y) (is0 x))
 -- funcion que cuenta la cantidad de divisores de un natural
 def cantDivisores = Y (\cd . \n i. (is0 i) zero (((divisible n i) suc id) (cd n (pred i))))
 
+-- version alternativa de cantDivisores que usa fold
+-- def cantDivisores = \n x.fst (x (\i.pair (((divisible n (snd i)) suc id) (fst i)) (suc (snd i))) (pair zero (suc zero)))
+
 -- funcion que determina si un natural es primo
 def esPrimo = \n. and (not (is0 (pred (cantDivisores n n)))) (is0 (pred (pred (cantDivisores n n))))
